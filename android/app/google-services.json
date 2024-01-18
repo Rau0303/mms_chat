@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "729374096041",
+    "project_id": "mms-chat-179b0",
+    "storage_bucket": "mms-chat-179b0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:729374096041:android:995184ed923f3481a787b8",
+        "android_client_info": {
+          "package_name": "com.example.mms_chat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgwi4Q_s0hxkaUbKfpVezf-T3DVMlONrA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

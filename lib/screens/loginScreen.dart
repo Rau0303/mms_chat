@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:mms_chat/screens/registerScreen.dart';
 import 'package:mms_chat/screens/resetPasswordScreen.dart';
+import 'package:mms_chat/services/authService.dart';
 import 'package:mms_chat/widgets/passwordTextField.dart';
 import 'package:mms_chat/widgets/saveElevatedButton.dart';
 import 'package:mms_chat/widgets/usernameTextField.dart';
+import 'package:provider/provider.dart';
 
 import '../widgets/customTextButton.dart';
 import '../widgets/labelText.dart';
@@ -17,6 +20,29 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  var logger = Logger(
+    printer: PrettyPrinter(),
+  );
+
+
+  void login(){
+    try
+    {
+      String username = usernameController.text.trim();
+      String password = passwordController.text.trim();
+
+    final ap = Provider.of<AuthService>(context,listen: false);
+    ap.signInWithEmailAndPassword(context, username, password);
+
+    logger.i("аутентификация прошла успешно!");
+    }
+    catch(e){
+      logger.e("Что-то пошло не так! $e");
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,7 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   SaveElevatedButton(
                       height: 50,
                       text: "Войти",
-                      onPressed: (){}),
+                      onPressed: login),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

@@ -102,37 +102,7 @@ class AuthService extends ChangeNotifier{
   }
 
 
-  void checkOldPasswordAndUpdate(BuildContext context, String oldPassword, String newPassword) async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    final currentUser = auth.currentUser;
 
-    if (currentUser != null) {
-      try {
-        // Получение email пользователя
-        String? email = currentUser.email;
-
-        if (email != null) {
-          // Переаутентификация пользователя с использованием email и password
-          AuthCredential credential = EmailAuthProvider.credential(email: email, password: oldPassword);
-          await auth.currentUser!.reauthenticateWithCredential(credential);
-
-          // Если переаутентификация прошла успешно, обновляем пароль
-          await auth.currentUser!.updatePassword(newPassword);
-          showSnackBar(context, 'Пароль успешно изменен', false);
-        } else {
-          showSnackBar(context, 'Не удалось получить email пользователя', true);
-        }
-      } on FirebaseAuthException catch (error) {
-        if (error.code == 'wrong-password') {
-          showSnackBar(context, 'Неправильный старый пароль', true);
-        } else {
-          showSnackBar(context, 'Ошибка при изменении пароля: ${error.message}', true);
-        }
-      } catch (error) {
-        showSnackBar(context, 'Ошибка при изменении пароля: $error', true);
-      }
-    }
-  }
 
 
 

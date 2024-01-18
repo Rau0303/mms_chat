@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
+import 'package:mms_chat/screens/loginScreen.dart';
+import 'package:mms_chat/services/authService.dart';
+import 'package:mms_chat/services/customSnackBar.dart';
+import 'package:provider/provider.dart';
 
 import '../widgets/labelText.dart';
 import '../widgets/saveElevatedButton.dart';
@@ -17,6 +22,26 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
     final Size screenSize = MediaQuery.of(context).size;
     final double screenHeight = screenSize.height;
     final double screenWidth = screenSize.width;
+    var logger = Logger(
+      printer: PrettyPrinter(),
+    );
+
+    void resetPassword(){
+      try{
+        String username = usernameController.text.trim();
+        final ap = Provider.of<AuthService>(context,listen: false);
+        ap.resetPassword(username, context);
+
+        logger.i("Сообщение успешно было отправлено! $username");
+        CustomSnackBar.showSnackBar(context, "Сообщение успешно было отправлено!", false);
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> const LoginScreen()), (route) => false);
+      }
+      catch(e){
+        logger.e("Что-то пошло не так! $e");
+      }
+
+    }
+
     return Scaffold(
       body: SafeArea(
         child: Padding(

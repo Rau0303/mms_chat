@@ -1,9 +1,28 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:mms_chat/firebase_options.dart';
 import 'package:mms_chat/screens/loginScreen.dart';
+import 'package:mms_chat/services/authService.dart';
+import 'package:provider/provider.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  try {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    runApp(
+        MultiProvider(providers: [
+          ChangeNotifierProvider(create: (_)=>AuthService()),
+        ],
+        child: const MyApp(),
+        ),
+        );
+  } catch (e) {
+    print('Error initializing Firebase: $e');
+  }
 }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -14,6 +33,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
+
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -37,3 +57,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+

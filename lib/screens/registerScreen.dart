@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
+import 'package:mms_chat/services/authService.dart';
+import 'package:mms_chat/services/customSnackBar.dart';
+import 'package:provider/provider.dart';
 
 import '../widgets/customTextButton.dart';
 import '../widgets/labelText.dart';
@@ -17,6 +21,35 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController rePasswordController = TextEditingController();
+
+  var logger = Logger(
+    printer: PrettyPrinter(),
+  );
+
+  void register(){
+    try{
+      String username = usernameController.text.trim();
+      String password = passwordController.text.trim();
+      String rePassword = rePasswordController.text.trim();
+      final ap = Provider.of<AuthService>(context,listen: false);
+
+      if(password == rePassword){
+        ap.createUserWithEmailAndPassword(context, username, password);
+        logger.i("пользователь успешно создан username=> $username password=> $password ");
+      }
+      else{
+        logger.e("пароли не совпадают!");
+        CustomSnackBar.showSnackBar(context, "пароли не совпадают!", true);
+      }
+    }
+    catch(e)
+    {
+      logger.e("Что-то пошло не так! $e");
+    }
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,8 +97,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       textInputAction: TextInputAction.done),
                   SaveElevatedButton(
                       height: 50,
-                      text: "Войти",
-                      onPressed: (){}),
+                      text: "Зарегистрироваться",
+                      onPressed: register),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
